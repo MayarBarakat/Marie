@@ -9,120 +9,109 @@
 
   <style>
     :root {
-      --bg1: #ffd6e7;
-      --bg2: #ffeef6;
-      --card: #ffffffcc;
-      --yes: #ff3b7a;
-      --yesHover: #ff1f68;
-      --love: #ff1f68;
+      --bg1:#ffd6e7; --bg2:#ffeef6;
+      --yes:#ff3b7a; --yesHover:#ff1f68;
     }
 
-    * { box-sizing: border-box; }
+    *{box-sizing:border-box}
 
-    body {
-      margin: 0;
-      min-height: 100svh;
-      display: grid;
-      place-items: center;
-      background: radial-gradient(circle at top, var(--bg2), var(--bg1));
-      font-family: system-ui, sans-serif;
-      overflow: hidden;
-      padding: 16px;
+    body{
+      margin:0;
+      min-height:100svh;
+      display:grid;
+      place-items:center;
+      background:radial-gradient(circle at top,var(--bg2),var(--bg1));
+      font-family:system-ui,sans-serif;
+      overflow:hidden;
     }
 
-    #confettiCanvas {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 9999;
+    #confettiCanvas{
+      position:fixed; inset:0;
+      pointer-events:none; z-index:9999;
     }
 
-    .card {
-      width: min(720px, 92vw);
-      padding: 26px 22px;
-      background: var(--card);
-      backdrop-filter: blur(10px);
-      border-radius: 22px;
-      text-align: center;
-      box-shadow: 0 18px 60px rgba(0,0,0,.15);
+    .card{
+      width:min(720px,92vw);
+      padding:26px;
+      background:#ffffffcc;
+      backdrop-filter:blur(10px);
+      border-radius:22px;
+      text-align:center;
+      box-shadow:0 18px 60px rgba(0,0,0,.15);
+      transition:transform .4s ease;
     }
 
-    h1 {
-      font-size: clamp(26px, 4vw, 44px);
-      margin: 12px 0 18px;
-      min-height: 3em;
+    h1{
+      font-size:clamp(26px,4vw,44px);
+      min-height:3em;
     }
 
-    .love {
-      color: var(--love);
-      animation: heartbeat 1s infinite;
+    .cursor::after{
+      content:"|";
+      animation:blink 1s infinite;
     }
 
-    @keyframes heartbeat {
-      0% { transform: scale(1); }
-      25% { transform: scale(1.08); }
-      50% { transform: scale(1); }
-      75% { transform: scale(1.05); }
-      100% { transform: scale(1); }
+    @keyframes blink{50%{opacity:0}}
+
+    .love{
+      color:#ff1f68;
+      animation:heartbeat 1s infinite;
     }
 
-    .cursor::after {
-      content: "|";
-      animation: blink 1s infinite;
-      margin-left: 2px;
+    @keyframes heartbeat{
+      0%{transform:scale(1)}
+      30%{transform:scale(1.08)}
+      60%{transform:scale(1)}
     }
 
-    @keyframes blink {
-      50% { opacity: 0; }
+    .button-zone{
+      position:relative;
+      width:min(520px,92%);
+      height:150px;
+      margin:auto;
     }
 
-    .button-zone {
-      position: relative;
-      width: min(520px, 92%);
-      height: 150px;
-      margin: 0 auto;
-      touch-action: none;
+    button{
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      padding:16px 26px;
+      font-size:18px;
+      font-weight:800;
+      border-radius:999px;
+      border:none;
+      cursor:pointer;
+      box-shadow:0 10px 24px rgba(0,0,0,.14);
+      transition:transform .15s ease, background .15s ease;
     }
 
-    button {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      padding: 16px 24px;
-      font-size: 18px;
-      font-weight: 800;
-      border-radius: 999px;
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 10px 24px rgba(0,0,0,.14);
+    #yesBtn{
+      left:18%;
+      background:var(--yes);
+      color:white;
     }
 
-    #yesBtn {
-      left: 18%;
-      background: var(--yes);
-      color: #fff;
+    #yesBtn:hover{background:var(--yesHover)}
+
+    #noBtn{
+      left:62%;
+      background:#e5e7eb;
     }
 
-    #noBtn {
-      left: 62%;
-      background: #e5e7eb;
+    .hint{font-size:13px;opacity:.7}
+
+    .result{display:none;margin-top:18px}
+
+    /* floating hearts */
+    .heart{
+      position:fixed;
+      bottom:-20px;
+      font-size:22px;
+      animation:float 3s linear forwards;
     }
 
-    .hint {
-      margin-top: 10px;
-      font-size: 13px;
-      opacity: .7;
-    }
-
-    .result {
-      display: none;
-      margin-top: 18px;
-    }
-
-    img {
-      width: min(380px, 90vw);
-      display: block;
-      margin: auto;
+    @keyframes float{
+      to{transform:translateY(-120vh);opacity:0}
     }
   </style>
 </head>
@@ -142,11 +131,11 @@
 
   <section class="result" id="result">
     <h2>💖💖💖</h2>
-    <img src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" />
+    <img src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif"
+         style="width:min(380px,90vw);margin:auto;display:block">
+    <button onclick="location.reload()">Replay 💕</button>
   </section>
 </main>
-
-<audio id="yesSound" src="https://assets.mixkit.co/sfx/preview/mixkit-magic-sweep-game-trophy-257.wav"></audio>
 
 <script>
   const title = document.getElementById("title");
@@ -155,66 +144,103 @@
   const zone = document.getElementById("zone");
   const hint = document.getElementById("hint");
   const result = document.getElementById("result");
-  const yesSound = document.getElementById("yesSound");
+  const card = document.querySelector(".card");
 
-  /* Confetti */
+  /* ---------- CONFETTI ---------- */
   const canvas = document.getElementById("confettiCanvas");
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+  const confettiInstance = confetti.create(canvas,{resize:true});
 
-  const confettiInstance = confetti.create(canvas, { resize: true });
-
-  function party() {
+  function party(){
     confettiInstance({
-      particleCount: 300,
-      spread: 160,
-      startVelocity: 60,
-      origin: { x: 0.5, y: 0.5 }
+      particleCount:320,
+      spread:160,
+      startVelocity:60,
+      origin:{x:.5,y:.5}
     });
   }
 
-  /* No button runs */
-  noBtn.addEventListener("mouseenter", () => {
-    noBtn.style.left = Math.random() * 70 + "%";
-    noBtn.style.top = Math.random() * 70 + "%";
-  });
+  /* ---------- FLOATING HEARTS ---------- */
+  function hearts(){
+    for(let i=0;i<14;i++){
+      const h=document.createElement("div");
+      h.className="heart";
+      h.textContent="❤️";
+      h.style.left=Math.random()*100+"vw";
+      document.body.appendChild(h);
+      setTimeout(()=>h.remove(),3000);
+    }
+  }
 
-  /* Typewriter */
-  function typeLines(el, lines, speed = 55) {
-    el.textContent = "";
+  /* ---------- TYPEWRITER ---------- */
+  function typeLines(el,lines,speed=55){
+    el.textContent="";
     el.classList.add("cursor");
-    let l = 0, i = 0;
+    let l=0,i=0;
 
-    function nextChar() {
-      if (l >= lines.length) {
+    function step(){
+      if(l>=lines.length){
         el.classList.remove("cursor");
         el.classList.add("love");
         return;
       }
-      if (i < lines[l].length) {
-        el.innerHTML += lines[l][i++];
-      } else {
-        el.innerHTML += "<br>";
-        l++; i = 0;
+      if(i<lines[l].length){
+        el.innerHTML+=lines[l][i++];
+      }else{
+        el.innerHTML+="<br>";
+        l++; i=0;
       }
-      setTimeout(nextChar, speed);
+      setTimeout(step,speed);
     }
-    nextChar();
+    step();
   }
 
-  yesBtn.addEventListener("click", () => {
-    if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
-    yesSound.play();
+  /* ---------- YES GROWS WHEN NO IS NEAR ---------- */
+  let yesScale=1;
 
-    typeLines(title, [
+  function growYes(){
+    yesScale=Math.min(2.2,yesScale+0.06);
+    yesBtn.style.transform=
+      `translateY(-50%) scale(${yesScale})`;
+  }
+
+  zone.addEventListener("pointermove",e=>{
+    const b=noBtn.getBoundingClientRect();
+    const d=Math.hypot(
+      (b.left+b.width/2)-e.clientX,
+      (b.top+b.height/2)-e.clientY
+    );
+    if(d<140){
+      noBtn.style.left=Math.random()*70+"%";
+      noBtn.style.top=Math.random()*70+"%";
+      growYes();
+    }
+  });
+
+  /* ---------- YES CLICK ---------- */
+  yesBtn.addEventListener("click",()=>{
+    if(navigator.vibrate) navigator.vibrate([100,50,100]);
+
+    document.body.style.background =
+      "radial-gradient(circle at center,#ffe0ec,#ffb3d9)";
+    card.style.transform="scale(1.04)";
+
+    typeLines(title,[
       "YAY! 💘",
-      "Marie, you are my Valentine!"
+      "Marie, you are my Valentine ❤️"
     ]);
 
-    zone.style.display = "none";
-    hint.style.display = "none";
-    result.style.display = "block";
+    zone.style.display="none";
+    hint.style.display="none";
+    result.style.display="block";
+
     party();
+    hearts();
+
+    setTimeout(()=>{
+      alert("I had this page ready… just in case ❤️");
+    },3000);
   });
 </script>
 </body>
