@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Be My Valentine</title>
+  <title>Marie will you be my Valentine?</title>
 
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
@@ -33,6 +33,7 @@
       border-radius:22px;
       text-align:center;
       box-shadow:0 20px 60px rgba(0,0,0,.15);
+      transition:transform .4s ease;
     }
 
     h1{
@@ -67,8 +68,8 @@
       cursor:pointer;
       box-shadow:0 10px 24px rgba(0,0,0,.14);
       transition:
-        left .35s ease,
-        top .35s ease,
+        left .25s ease,
+        top .25s ease,
         transform .3s ease,
         background .15s ease;
     }
@@ -125,7 +126,7 @@
     <button id="no">No</button>
   </div>
 
-  <div class="hint">No عم يحاول يفكها بس مو زابط 😈</div>
+  <div class="hint">“No” seems a bit shy 😈</div>
 
   <div class="result" id="result">
     <h2>💖💖💖</h2>
@@ -140,17 +141,17 @@
   const zone = document.getElementById("zone");
   const result = document.getElementById("result");
 
-  /* confetti */
+  // Confetti
   const canvas = document.getElementById("confetti");
   canvas.width = innerWidth;
   canvas.height = innerHeight;
   const fx = confetti.create(canvas,{resize:true});
 
   function party(){
-    fx({particleCount:280,spread:160,startVelocity:50});
+    fx({particleCount:300,spread:160,startVelocity:50});
   }
 
-  /* hearts */
+  // Hearts
   function hearts(){
     for(let i=0;i<12;i++){
       const h=document.createElement("div");
@@ -162,7 +163,7 @@
     }
   }
 
-  /* typewriter */
+  // Typewriter
   function typeLines(lines){
     title.textContent="";
     title.classList.add("cursor");
@@ -185,10 +186,10 @@
     step();
   }
 
-  /* yes grows / no moves (MEDIUM SPEED) */
+  // Yes grows / No moves (FASTER)
   let scale=1;
   function growYes(){
-    scale=Math.min(2,scale+0.06);
+    scale=Math.min(2.1,scale+0.06);
     yes.style.transform=`translateY(-50%) scale(${scale})`;
   }
 
@@ -199,13 +200,13 @@
       (b.top+b.height/2)-e.clientY
     );
     if(d<140){
-      no.style.left=Math.random()*60+"%";
-      no.style.top=Math.random()*60+"%";
+      no.style.left=Math.random()*65+"%";
+      no.style.top=Math.random()*65+"%";
       growYes();
     }
   });
 
-  /* yes click */
+  // Yes click
   yes.onclick=()=>{
     document.body.style.background =
       "radial-gradient(circle,#ffe0ec,#ffb3d9)";
