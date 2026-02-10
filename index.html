@@ -2,43 +2,37 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Marie will you be my Valentine?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Be My Valentine</title>
 
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
   <style>
-    :root {
-      --bg1:#ffd6e7; --bg2:#ffeef6;
-      --yes:#ff3b7a; --yesHover:#ff1f68;
-    }
-
-    *{box-sizing:border-box}
-
     body{
       margin:0;
-      min-height:100svh;
+      min-height:100vh;
       display:grid;
       place-items:center;
-      background:radial-gradient(circle at top,var(--bg2),var(--bg1));
+      background:radial-gradient(circle at top,#ffeef6,#ffd6e7);
       font-family:system-ui,sans-serif;
       overflow:hidden;
     }
 
-    #confettiCanvas{
-      position:fixed; inset:0;
-      pointer-events:none; z-index:9999;
+    canvas{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:10;
     }
 
     .card{
-      width:min(720px,92vw);
-      padding:26px;
+      width:min(700px,92vw);
+      padding:28px;
       background:#ffffffcc;
       backdrop-filter:blur(10px);
       border-radius:22px;
       text-align:center;
-      box-shadow:0 18px 60px rgba(0,0,0,.15);
-      transition:transform .4s ease;
+      box-shadow:0 20px 60px rgba(0,0,0,.15);
     }
 
     h1{
@@ -50,23 +44,13 @@
       content:"|";
       animation:blink 1s infinite;
     }
-
     @keyframes blink{50%{opacity:0}}
 
-    .love{
-      color:#ff1f68;
-      animation:heartbeat 1s infinite;
-    }
+    .love{color:#ff1f68}
 
-    @keyframes heartbeat{
-      0%{transform:scale(1)}
-      30%{transform:scale(1.08)}
-      60%{transform:scale(1)}
-    }
-
-    .button-zone{
+    .zone{
       position:relative;
-      width:min(520px,92%);
+      width:min(520px,90%);
       height:150px;
       margin:auto;
     }
@@ -75,7 +59,7 @@
       position:absolute;
       top:50%;
       transform:translateY(-50%);
-      padding:16px 26px;
+      padding:16px 28px;
       font-size:18px;
       font-weight:800;
       border-radius:999px;
@@ -83,26 +67,29 @@
       cursor:pointer;
       box-shadow:0 10px 24px rgba(0,0,0,.14);
       transition:
+        left .35s ease,
+        top .35s ease,
         transform .3s ease,
-        background .15s ease,
-        left .6s ease,
-        top .6s ease;
+        background .15s ease;
     }
 
-    #yesBtn{
+    #yes{
       left:18%;
-      background:var(--yes);
+      background:#ff3b7a;
       color:white;
     }
+    #yes:hover{background:#ff1f68}
 
-    #yesBtn:hover{background:var(--yesHover)}
-
-    #noBtn{
+    #no{
       left:62%;
       background:#e5e7eb;
     }
 
-    .hint{font-size:13px;opacity:.7}
+    .hint{
+      font-size:13px;
+      opacity:.7;
+      margin-top:10px;
+    }
 
     .result{
       display:none;
@@ -115,24 +102,12 @@
       margin:14px auto;
     }
 
-    .replay{
-      margin-top:12px;
-      padding:10px 18px;
-      font-size:14px;
-      border-radius:999px;
-      border:none;
-      background:#ffe4ef;
-      cursor:pointer;
-    }
-
-    /* floating hearts */
     .heart{
       position:fixed;
       bottom:-20px;
       font-size:22px;
       animation:float 3.5s linear forwards;
     }
-
     @keyframes float{
       to{transform:translateY(-120vh);opacity:0}
     }
@@ -140,50 +115,42 @@
 </head>
 
 <body>
-<canvas id="confettiCanvas"></canvas>
+<canvas id="confetti"></canvas>
 
-<main class="card">
+<div class="card">
   <h1 id="title">Marie will you be my Valentine?</h1>
 
-  <section class="button-zone" id="zone">
-    <button id="yesBtn">Yes</button>
-    <button id="noBtn">No</button>
-  </section>
+  <div class="zone" id="zone">
+    <button id="yes">Yes</button>
+    <button id="no">No</button>
+  </div>
 
-  <div class="hint" id="hint">“No” seems a bit shy 😈</div>
+  <div class="hint">No عم يحاول يفكها بس مو زابط 😈</div>
 
-  <section class="result" id="result">
+  <div class="result" id="result">
     <h2>💖💖💖</h2>
     <img src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif">
-    <button class="replay" onclick="location.reload()">Replay 💕</button>
-  </section>
-</main>
+  </div>
+</div>
 
 <script>
   const title = document.getElementById("title");
-  const yesBtn = document.getElementById("yesBtn");
-  const noBtn = document.getElementById("noBtn");
+  const yes = document.getElementById("yes");
+  const no = document.getElementById("no");
   const zone = document.getElementById("zone");
-  const hint = document.getElementById("hint");
   const result = document.getElementById("result");
-  const card = document.querySelector(".card");
 
-  /* ---------- CONFETTI ---------- */
-  const canvas = document.getElementById("confettiCanvas");
+  /* confetti */
+  const canvas = document.getElementById("confetti");
   canvas.width = innerWidth;
   canvas.height = innerHeight;
-  const confettiInstance = confetti.create(canvas,{resize:true});
+  const fx = confetti.create(canvas,{resize:true});
 
   function party(){
-    confettiInstance({
-      particleCount:300,
-      spread:160,
-      startVelocity:55,
-      origin:{x:.5,y:.5}
-    });
+    fx({particleCount:280,spread:160,startVelocity:50});
   }
 
-  /* ---------- FLOATING HEARTS ---------- */
+  /* hearts */
   function hearts(){
     for(let i=0;i<12;i++){
       const h=document.createElement("div");
@@ -195,70 +162,65 @@
     }
   }
 
-  /* ---------- TYPEWRITER ---------- */
-  function typeLines(el,lines,speed=55){
-    el.textContent="";
-    el.classList.add("cursor");
+  /* typewriter */
+  function typeLines(lines){
+    title.textContent="";
+    title.classList.add("cursor");
     let l=0,i=0;
 
     function step(){
       if(l>=lines.length){
-        el.classList.remove("cursor");
-        el.classList.add("love");
+        title.classList.remove("cursor");
+        title.classList.add("love");
         return;
       }
       if(i<lines[l].length){
-        el.innerHTML+=lines[l][i++];
+        title.innerHTML+=lines[l][i++];
       }else{
-        el.innerHTML+="<br>";
+        title.innerHTML+="<br>";
         l++; i=0;
       }
-      setTimeout(step,speed);
+      setTimeout(step,55);
     }
     step();
   }
 
-  /* ---------- YES GROWS / NO RUNS (SLOWER) ---------- */
-  let yesScale=1;
-
+  /* yes grows / no moves (MEDIUM SPEED) */
+  let scale=1;
   function growYes(){
-    yesScale=Math.min(2.1,yesScale+0.05);
-    yesBtn.style.transform=`translateY(-50%) scale(${yesScale})`;
+    scale=Math.min(2,scale+0.06);
+    yes.style.transform=`translateY(-50%) scale(${scale})`;
   }
 
   zone.addEventListener("pointermove",e=>{
-    const b=noBtn.getBoundingClientRect();
+    const b=no.getBoundingClientRect();
     const d=Math.hypot(
       (b.left+b.width/2)-e.clientX,
       (b.top+b.height/2)-e.clientY
     );
-    if(d<150){
-      noBtn.style.left=Math.random()*65+"%";
-      noBtn.style.top=Math.random()*65+"%";
+    if(d<140){
+      no.style.left=Math.random()*60+"%";
+      no.style.top=Math.random()*60+"%";
       growYes();
     }
   });
 
-  /* ---------- YES CLICK ---------- */
-  yesBtn.addEventListener("click",()=>{
-    if(navigator.vibrate) navigator.vibrate([100,50,100]);
-
+  /* yes click */
+  yes.onclick=()=>{
     document.body.style.background =
-      "radial-gradient(circle at center,#ffe0ec,#ffb3d9)";
-    card.style.transform="scale(1.04)";
-
-    typeLines(title,[
-      "YAY! 💘",
-      "Marie, you are my Valentine ❤️"
-    ]);
-
+      "radial-gradient(circle,#ffe0ec,#ffb3d9)";
     zone.style.display="none";
-    hint.style.display="none";
+    document.querySelector(".hint").style.display="none";
     result.style.display="block";
+
+    typeLines([
+      "YAAAY 💘",
+      "Marie is my Valentine ❤️"
+    ]);
 
     party();
     hearts();
-  });
+  };
 </script>
 </body>
 </html>
