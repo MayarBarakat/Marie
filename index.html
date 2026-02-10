@@ -82,7 +82,11 @@
       border:none;
       cursor:pointer;
       box-shadow:0 10px 24px rgba(0,0,0,.14);
-      transition:transform .15s ease, background .15s ease;
+      transition:
+        transform .3s ease,
+        background .15s ease,
+        left .6s ease,
+        top .6s ease;
     }
 
     #yesBtn{
@@ -100,14 +104,33 @@
 
     .hint{font-size:13px;opacity:.7}
 
-    .result{display:none;margin-top:18px}
+    .result{
+      display:none;
+      margin-top:18px;
+    }
+
+    .result img{
+      width:min(380px,90vw);
+      display:block;
+      margin:14px auto;
+    }
+
+    .replay{
+      margin-top:12px;
+      padding:10px 18px;
+      font-size:14px;
+      border-radius:999px;
+      border:none;
+      background:#ffe4ef;
+      cursor:pointer;
+    }
 
     /* floating hearts */
     .heart{
       position:fixed;
       bottom:-20px;
       font-size:22px;
-      animation:float 3s linear forwards;
+      animation:float 3.5s linear forwards;
     }
 
     @keyframes float{
@@ -131,9 +154,8 @@
 
   <section class="result" id="result">
     <h2>💖💖💖</h2>
-    <img src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif"
-         style="width:min(380px,90vw);margin:auto;display:block">
-    <button onclick="location.reload()">Replay 💕</button>
+    <img src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif">
+    <button class="replay" onclick="location.reload()">Replay 💕</button>
   </section>
 </main>
 
@@ -154,22 +176,22 @@
 
   function party(){
     confettiInstance({
-      particleCount:320,
+      particleCount:300,
       spread:160,
-      startVelocity:60,
+      startVelocity:55,
       origin:{x:.5,y:.5}
     });
   }
 
   /* ---------- FLOATING HEARTS ---------- */
   function hearts(){
-    for(let i=0;i<14;i++){
+    for(let i=0;i<12;i++){
       const h=document.createElement("div");
       h.className="heart";
       h.textContent="❤️";
       h.style.left=Math.random()*100+"vw";
       document.body.appendChild(h);
-      setTimeout(()=>h.remove(),3000);
+      setTimeout(()=>h.remove(),3500);
     }
   }
 
@@ -196,13 +218,12 @@
     step();
   }
 
-  /* ---------- YES GROWS WHEN NO IS NEAR ---------- */
+  /* ---------- YES GROWS / NO RUNS (SLOWER) ---------- */
   let yesScale=1;
 
   function growYes(){
-    yesScale=Math.min(2.2,yesScale+0.06);
-    yesBtn.style.transform=
-      `translateY(-50%) scale(${yesScale})`;
+    yesScale=Math.min(2.1,yesScale+0.05);
+    yesBtn.style.transform=`translateY(-50%) scale(${yesScale})`;
   }
 
   zone.addEventListener("pointermove",e=>{
@@ -211,9 +232,9 @@
       (b.left+b.width/2)-e.clientX,
       (b.top+b.height/2)-e.clientY
     );
-    if(d<140){
-      noBtn.style.left=Math.random()*70+"%";
-      noBtn.style.top=Math.random()*70+"%";
+    if(d<150){
+      noBtn.style.left=Math.random()*65+"%";
+      noBtn.style.top=Math.random()*65+"%";
       growYes();
     }
   });
@@ -237,10 +258,6 @@
 
     party();
     hearts();
-
-    setTimeout(()=>{
-      alert("I had this page ready… just in case ❤️");
-    },3000);
   });
 </script>
 </body>
